@@ -1,20 +1,27 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { SheetsService } from '../sheets/sheets.service';
 
 @Controller('proyectos')
 export class ProyectosController {
-  constructor(private readonly sheetsService: SheetsService) {}
+    constructor(private readonly sheetsService: SheetsService) { }
 
-  @Get()
-  async obtenerProyectos() {
-    const proyectos = await this.sheetsService.getProyectos();
-    return { proyectos };
-  }
+    // ProyectosController
+    @Get()
+    async obtenerProyectos(@Query('q') query?: string) {
+        const proyectos = await this.sheetsService.getProyectos();
+        if (query) {
+            const normalizar = (txt: string) => txt.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+            return {
+                proyectos: proyectos.filter(s => normalizar(s).includes(normalizar(query)))
+            };
+        }
+        return { proyectos };
+    }
 
-  @Post()
-  async agregarProyecto(@Body('proyecto') proyecto: string) {
-    if (!proyecto) return { message: 'Campo proyecto vacío' };
-    await this.sheetsService.addProyecto(proyecto);
-    return { message: 'Proyecto registrado o ya existente' };
-  }
+    @Post()
+    async agregarProyecto(@Body('proyecto') proyecto: string) {
+        if (!proyecto) return { message: 'Campo proyecto vacío' };
+        await this.sheetsService.addProyecto(proyecto);
+        return { message: 'Proyecto registrado o ya existente' };
+    }
 }

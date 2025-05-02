@@ -19,9 +19,13 @@ export class ProyectosController {
     }
 
     @Post()
-    async agregarProyecto(@Body('proyecto') proyecto: string) {
-        if (!proyecto) return { message: 'Campo proyecto vacío' };
-        await this.sheetsService.addProyecto(proyecto);
-        return { message: 'Proyecto registrado o ya existente' };
+    async registrarProyecto(@Body() body: { proyecto: string; force?: boolean }) {
+        const { proyecto, force = false } = body;
+        await this.sheetsService.addProyecto(proyecto, force);
+        return { message: 'Proyecto registrado correctamente' };
     }
+
 }
+
+
+

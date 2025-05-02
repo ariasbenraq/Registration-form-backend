@@ -20,9 +20,10 @@ export class SedesController {
 
 
     @Post()
-    async agregarSede(@Body('sede') sede: string) {
-        if (!sede) return { message: 'Campo sede vacío' };
-        await this.sheetsService.addSede(sede);
-        return { message: 'Sede registrada o ya existente' };
+    async agregarSede(@Body() body: { sede: string; force?: boolean }) {
+        const { sede, force = false} = body;
+        await this.sheetsService.addSede(sede, force);
+        return { message: 'Sede registrada correctamente' };
     }
+
 }

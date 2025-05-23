@@ -2,7 +2,7 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import axios from 'axios';
 // import { randomUUID } from 'crypto';
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzAWH-4uvqSbOxGlq2vCapXpRXUDtdUT1hGS1fMoi-V23RMVfu1VB1BR684VXl_SBO1cw/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzUywQQ8uN51aCmiLvPw3GsMFBwPP-ppPGa0oQXXBjDmIiOAbeWt4fzCaMyVjsJ7pNjrQ/exec';
 
 @Injectable()
 export class SheetsService {
@@ -48,6 +48,12 @@ export class SheetsService {
             return distancia <= ajusteTolerancia;
         });
     }
+
+    async getRegistros(): Promise<any[]> {
+        const res = await axios.get(`${SCRIPT_URL}?tipo=registros`);
+        return res.data;
+    }
+
 
     // ✅ Obtener las sedes
     async getSedes(): Promise<string[]> {

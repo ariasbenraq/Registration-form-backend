@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { SheetsService } from '../sheets/sheets.service';
 import { RegistroDto } from './dto/registro.dto';
 
@@ -10,5 +10,11 @@ export class RegistroController {
   async registrar(@Body() body: RegistroDto) {
     await this.sheetsService.registrarDatos(body);
     return { message: 'Datos registrados correctamente' };
+  }
+
+  @Get()
+  async obtenerRegistros() {
+    const registros = await this.sheetsService.getRegistros();
+    return registros;
   }
 }

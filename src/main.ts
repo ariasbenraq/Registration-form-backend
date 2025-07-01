@@ -4,7 +4,9 @@ import { ValidationPipe } from "@nestjs/common";
 import * as dotenv from "dotenv";
 
 // Carga el archivo .env correspondiente
-dotenv.config();
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV || "development"}`,
+});
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
